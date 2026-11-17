@@ -17,9 +17,118 @@
       "stats": { "hp": 44, "attack": 48, "defense": 65 },
       "image": "img/tidalix.png",
       "description": "Il vit dans les rochers et suit le rythme des marées."
+    },
+    {
+      "id": 3,
+      "numero": "#007",
+      "name": "Leafling",
+      "type": "Plante",
+      "stats": { "hp": 45, "attack": 49, "defense": 49 },
+      "image": "img/leafling.png",
+      "description": "Une graine sur son dos pousse un peu plus chaque jour au soleil."
+    },
+    {
+      "id": 4,
+      "numero": "#010",
+      "name": "Voltik",
+      "type": "Électrique",
+      "stats": { "hp": 35, "attack": 55, "defense": 40 },
+      "image": "img/voltik.png",
+      "description": "Ses joues stockent de l'électricité qu'il libère en cas de danger."
+    },
+    {
+      "id": 5,
+      "numero": "#013",
+      "name": "Pyrofang",
+      "type": "Feu",
+      "stats": { "hp": 58, "attack": 64, "defense": 58 },
+      "image": "img/pyrofang.png",
+      "description": "Un loup de braise qui laisse des traces chaudes sur son passage."
+    },
+    {
+      "id": 6,
+      "numero": "#016",
+      "name": "Aquaflip",
+      "type": "Eau",
+      "stats": { "hp": 50, "attack": 45, "defense": 55 },
+      "image": "img/aquaflip.png",
+      "description": "Un dauphin joueur qui saute par-dessus les vagues pour s'amuser."
+    },
+    {
+      "id": 7,
+      "numero": "#019",
+      "name": "Mossbear",
+      "type": "Plante",
+      "stats": { "hp": 70, "attack": 62, "defense": 80 },
+      "image": "img/mossbear.png",
+      "description": "Un ours couvert de mousse qui dort des mois dans la forêt."
+    },
+    {
+      "id": 8,
+      "numero": "#022",
+      "name": "Zapfox",
+      "type": "Électrique",
+      "stats": { "hp": 55, "attack": 70, "defense": 50 },
+      "image": "img/zapfox.png",
+      "description": "Un renard rapide dont le pelage crépite avant l'orage."
+    },
+    {
+      "id": 9,
+      "numero": "#025",
+      "name": "Rockjaw",
+      "type": "Roche",
+      "stats": { "hp": 80, "attack": 85, "defense": 100 },
+      "image": "img/rockjaw.png",
+      "description": "Sa mâchoire de pierre peut broyer un rocher en quelques secondes."
+    },
+    {
+      "id": 10,
+      "numero": "#028",
+      "name": "Pebblet",
+      "type": "Roche",
+      "stats": { "hp": 40, "attack": 80, "defense": 100 },
+      "image": "img/pebblet.png",
+      "description": "Il se cache parmi les cailloux et reste immobile pendant des jours."
+    },
+    {
+      "id": 11,
+      "numero": "#031",
+      "name": "Blazehorn",
+      "type": "Feu",
+      "stats": { "hp": 78, "attack": 84, "defense": 78 },
+      "image": "img/blazehorn.png",
+      "description": "Un cerf dont les bois brûlent comme des torches dans la nuit."
+    },
+    {
+      "id": 12,
+      "numero": "#034",
+      "name": "Frostail",
+      "type": "Glace",
+      "stats": { "hp": 60, "attack": 55, "defense": 65 },
+      "image": "img/frostail.png",
+      "description": "Sa queue de givre gèle l'eau des flaques qu'il traverse."
+    },
+    {
+      "id": 13,
+      "numero": "#037",
+      "name": "Sporelle",
+      "type": "Plante",
+      "stats": { "hp": 52, "attack": 40, "defense": 60 },
+      "image": "img/sporelle.png",
+      "description": "Elle disperse des spores lumineuses qui guident les voyageurs perdus."
+    },
+    {
+      "id": 14,
+      "numero": "#040",
+      "name": "Glacier",
+      "type": "Glace",
+      "stats": { "hp": 90, "attack": 70, "defense": 95 },
+      "image": "img/glacier.png",
+      "description": "Un géant des montagnes qui avance lentement sous une carapace de glace."
     }
   ],
   "teams": [
-    { "id": 1, "name": "Équipe Flamme", "creatureIds": [1, 2] }
+    { "id": 1, "name": "Équipe Flamme", "creatureIds": [1, 5] },
+    { "id": 2, "name": "Équipe Marée", "creatureIds": [2, 6] }
   ]
 }
