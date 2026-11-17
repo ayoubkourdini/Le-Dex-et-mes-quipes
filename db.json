@@ -1,0 +1,25 @@
+{
+  "creatures": [
+    {
+      "id": 1,
+      "numero": "#001",
+      "name": "Emberkit",
+      "type": "Feu",
+      "stats": { "hp": 39, "attack": 52, "defense": 43 },
+      "image": "img/emberkit.png",
+      "description": "Un petit renard dont la queue s'enflamme quand il est content."
+    },
+    {
+      "id": 2,
+      "numero": "#004",
+      "name": "Tidalix",
+      "type": "Eau",
+      "stats": { "hp": 44, "attack": 48, "defense": 65 },
+      "image": "img/tidalix.png",
+      "description": "Il vit dans les rochers et suit le rythme des marées."
+    }
+  ],
+  "teams": [
+    { "id": 1, "name": "Équipe Flamme", "creatureIds": [1, 2] }
+  ]
+}
