@@ -1,5 +1,6 @@
-import { getCreatures, searchCreature } from "./services/api.js";
+import { getCreatures } from "./api.js";
 import { affichage, showDetails, hideDetails, showEmpty, showError, showLoading, showDetailError, showDetailLoading} from "./ui.js";
+import { storeFilter, getStoreTypes } from "./storage.js";
 
 let allCreatures = [];
 let offset = 20;
@@ -7,7 +8,7 @@ let isLoading = false;
 let lastAction = null;
 
 
-let currentType = "all";
+let currentType = getStoreTypes();
 const button = document.getElementById("chargeBtn");
 const searchForm = document.getElementById("search-form");
 const searchInput = document.getElementById("search");
@@ -20,7 +21,7 @@ async function loadCreatures() {
     lastAction = loadCreatures;
     showLoading();
     try{
-        allCreatures = await getCreatures(0);
+        allCreatures = await getCreatures("/creatures");
         applyFilter();
     } catch (error) {
         showError(error.message)
@@ -29,11 +30,13 @@ async function loadCreatures() {
 }
 loadCreatures()
 
-function applyFilter() {
+async function applyFilter() {
+    currentType = getStoreTypes()
     if (currentType === "all") {
         affichage(allCreatures);
     } else {
-        const filtered = allCreatures.filter(creature => creature.type === currentType);
+        const filtered = await getCreatures(`/creatures?type=${currentType}`);
+        console.log(filtered)
         affichage(filtered);
     }
 }
@@ -48,12 +51,15 @@ button.addEventListener("click", async () => {
 const filterButtons = document.querySelectorAll("#filters button");
 filterButtons.forEach(filterBtn => {
     filterBtn.addEventListener("click", () =>  {
+        currentType = getStoreTypes()
         currentType = filterBtn.dataset.type
+        storeFilter(currentType)
         applyFilter() 
     })
 })
 
 async function handleSearch (event){
+    currentType = getStoreTypes()
     event.preventDefault();
     const query = searchInput.value.toLowerCase().trim()
     if (query === "") {
@@ -63,8 +69,16 @@ async function handleSearch (event){
     showLoading()
     searchBtn.disabled = true
     try {
-        const found = await searchCreature(query);
-        affichage([found])
+        let found = []
+        if (currentType === "all"){
+             found = await getCreatures(`/creatures?q=${query}`);
+        }else {
+             found = await getCreatures(`/creatures?type=${currentType}&q=${query}`) 
+        }
+        console.log(found)
+
+
+        affichage(found)
     } catch (error) {
         if (error.message.includes("404") === true) {
             showEmpty(query);
