@@ -40,3 +40,11 @@ export function getLastSearch () {
     }
     return saved
 }
+
+export function storeFilter(type){
+    localStorage.setItem("type", JSON.stringify(type))
+}
+export function getStoreTypes(){
+    const restore = JSON.parse(localStorage.getItem("type")) || "all"
+    return restore
+} 
