@@ -3,6 +3,7 @@ import { validateCreature } from "./rules.js";
 import { affichage, showDetails, hideDetails, showEmpty, showError, showLoading, showDetailError, showDetailLoading, showFormErrors, showFormMessage} from "./ui.js";
 import { storeFilter, getStoreTypes, saveDraft, getDraft, clearDraft } from "./storage.js";
 import { async } from "postcss-js";
+import { description } from "commander";
 
 let currentType = getStoreTypes()
 let currentQuery = ""
@@ -105,4 +106,40 @@ form.addEventListener("input", () => {
 })
 form.addEventListener("reset", clearDraft)
 
-form.addEventListener
+form.addEventListener("submit", async (event) => {
+    event.preventDefault()
+    const data = object.fromEntries(new FormData(form))
+
+    const errors = validateCreature(data)
+    showFormErrors(errors)
+    if (Object.keys(errors).length > 0) {
+        return
+    }
+
+    const newCreature = {
+        name: data.name.trim(),
+        type: data.type,
+        level: data.level,
+        stats: {
+            hp: Number(data.stat1),
+            attack: Number(data.stat2),
+            defence: Number(data.stat3)
+        },
+        image: data.image,
+        description: data.description
+    }
+
+    submitBtn.disabled = true
+    showFormMessage("Envoi en cours...")
+    try {
+        await createCreature(newCreature)
+        form.reset()
+        clearDraft()
+        showFormMessage("Créature ajoutée ✅")
+        refresh()
+    } catch (error) {
+        showFormMessage(error.message)
+    } finally {
+        submitBtn.disabled = false
+    }
+})
