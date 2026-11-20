@@ -2,8 +2,7 @@ import { getCreatures, getCreature, createCreature } from "./api.js";
 import { validateCreature } from "./rules.js";
 import { affichage, showDetails, hideDetails, showEmpty, showError, showLoading, showDetailError, showDetailLoading, showFormErrors, showFormMessage} from "./ui.js";
 import { storeFilter, getStoreTypes, saveDraft, getDraft, clearDraft } from "./storage.js";
-import { async } from "postcss-js";
-import { description } from "commander";
+
 
 let currentType = getStoreTypes()
 let currentQuery = ""
@@ -21,7 +20,7 @@ const submitBtn = form.querySelector('button[type="submit"]')
 
 
 async function refresh() {
-    lastAction = refresh()
+    lastAction = refresh
     showLoading()
 
     const params = new URLSearchParams()
@@ -31,7 +30,7 @@ async function refresh() {
     if (currentQuery !== "") {
         params.set("q", currentQuery)
     }
-    const sortParts = sortSelect.value.split("/")
+    const sortParts = sortSelect.value.split("|")
     params.set("_sort", sortParts[0])
     params.set("_order", sortParts[1])
 
@@ -63,7 +62,13 @@ searchForm.addEventListener("submit", (event) => {
     refresh()
 })
 
-clearBtn.addEventListener("change", refresh)
+clearBtn.addEventListener("click", () => {
+    searchInput.value = ""
+    currentQuery = ""
+    refresh()
+})
+
+sortSelect.addEventListener("change", refresh)
 
 async function handleCardClick(event) {
     const card = event.target.closest("article")
@@ -108,7 +113,7 @@ form.addEventListener("reset", clearDraft)
 
 form.addEventListener("submit", async (event) => {
     event.preventDefault()
-    const data = object.fromEntries(new FormData(form))
+    const data = Object.fromEntries(new FormData(form))
 
     const errors = validateCreature(data)
     showFormErrors(errors)
