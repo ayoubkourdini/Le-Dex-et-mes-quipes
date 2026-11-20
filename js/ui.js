@@ -73,3 +73,19 @@ export function showDetailError(message){
   panel.classList.add("flex");
 }
 
+export function showFormErrors(errors) {
+  const fields = {
+    name: "erreur-nom",
+    type: "erreur-type",
+    stat1: "erreur-stat1",
+    stat2: "erreur-stat2",
+    stat3: "erreur-stat3"
+  }
+  for (const field in fields) {
+    document.getElementById(fields[field].textContent = errors[field] || "")
+  }
+}
+
+export function showFormMessage () {
+  document.getElementById("form-message").textContent = text
+}
