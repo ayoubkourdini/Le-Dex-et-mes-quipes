@@ -1,124 +1,108 @@
-import { getCreatures } from "./api.js";
-import { affichage, showDetails, hideDetails, showEmpty, showError, showLoading, showDetailError, showDetailLoading} from "./ui.js";
-import { storeFilter, getStoreTypes } from "./storage.js";
+import { getCreatures, getCreature, createCreature } from "./api.js";
+import { validateCreature } from "./rules.js";
+import { affichage, showDetails, hideDetails, showEmpty, showError, showLoading, showDetailError, showDetailLoading, showFormErrors, showFormMessage} from "./ui.js";
+import { storeFilter, getStoreTypes, saveDraft, getDraft, clearDraft } from "./storage.js";
+import { async } from "postcss-js";
 
-let allCreatures = [];
-let offset = 20;
-let isLoading = false;
-let lastAction = null;
+let currentType = getStoreTypes()
+let currentQuery = ""
+let lastAction = null
+let isLoading = false
+
+const searchForm = document.getElementById("search-form")
+const searchInput = document.getElementById("search")
+const clearBtn = document.getElementById("clear-btn")
+const sortSelect = document.getElementById("sort")
+const grid = document.getElementById("grid")
+const detailClose = document.getElementById("detail-close")
+const form = document.getElementById("creature-form")
+const submitBtn = form.querySelector('button[type="submit"]')
 
 
-let currentType = getStoreTypes();
-const button = document.getElementById("chargeBtn");
-const searchForm = document.getElementById("search-form");
-const searchInput = document.getElementById("search");
-const searchBtn = document.getElementById("search-btn");
-const clearBtn = document.getElementById("clear-btn");
-const grid = document.getElementById("grid");
-const detailClose = document.getElementById("detail-close");
+async function refresh() {
+    lastAction = refresh()
+    showLoading()
 
-async function loadCreatures() {
-    lastAction = loadCreatures;
-    showLoading();
-    try{
-        allCreatures = await getCreatures("/creatures");
-        applyFilter();
+    const params = new URLSearchParams()
+    if (currentType !== "all") {
+        params.set("type", currentType)
+    }
+    if (currentQuery !== "") {
+        params.set("q", currentQuery)
+    }
+    const sortParts = sortSelect.value.split("/")
+    params.set("_sort", sortParts[0])
+    params.set("_order", sortParts[1])
+
+    try {
+        const creatures = await getCreatures(`/creatures?${params.toString()}`)
+        if (creatures.length === 0) {
+            showEmpty(currentQuery)
+        } else {
+            affichage(creatures)
+        }
     } catch (error) {
         showError(error.message)
     }
-
 }
-loadCreatures()
+refresh()
 
-async function applyFilter() {
-    currentType = getStoreTypes()
-    if (currentType === "all") {
-        affichage(allCreatures);
-    } else {
-        const filtered = await getCreatures(`/creatures?type=${currentType}`);
-        console.log(filtered)
-        affichage(filtered);
-    }
-}
-
-button.addEventListener("click", async () => {
-    const newCreature = await getCreatures(offset);
-    allCreatures = [...allCreatures, ...newCreature];
-    offset += 20;
-    applyFilter();
-})
-
-const filterButtons = document.querySelectorAll("#filters button");
+const filterButtons  = document.querySelectorAll("#filters button")
 filterButtons.forEach(filterBtn => {
-    filterBtn.addEventListener("click", () =>  {
-        currentType = getStoreTypes()
-        currentType = filterBtn.dataset.type
+    filterBtn.addEventListener("click", () => {
+        currentType = filterBtn.dataset.type 
         storeFilter(currentType)
-        applyFilter() 
+        refresh()
     })
 })
 
-async function handleSearch (event){
-    currentType = getStoreTypes()
-    event.preventDefault();
-    const query = searchInput.value.toLowerCase().trim()
-    if (query === "") {
-        return
-    }
-    lastAction = () => {handleSearch(event)}
-    showLoading()
-    searchBtn.disabled = true
-    try {
-        let found = []
-        if (currentType === "all"){
-             found = await getCreatures(`/creatures?q=${query}`);
-        }else {
-             found = await getCreatures(`/creatures?type=${currentType}&q=${query}`) 
-        }
-        console.log(found)
+searchForm.addEventListener("submit", (event) => {
+    event.preventDefault()
+    currentQuery = searchInput.value.trim()
+    refresh()
+})
 
+clearBtn.addEventListener("change", refresh)
 
-        affichage(found)
-    } catch (error) {
-        if (error.message.includes("404") === true) {
-            showEmpty(query);
-        } else {
-            showError(error.message)
-        }
-    } finally {
-        searchBtn.disabled = false
-    }
-}
-
-function handleClear (){
-    searchInput.value = "";
-    applyFilter()
-}
-
-searchForm.addEventListener("submit", handleSearch);
-clearBtn.addEventListener("click", handleClear)
-
-async function handleCardClick (event) {
-    const card = event.target.closest("article") 
+async function handleCardClick(event) {
+    const card = event.target.closest("article")
     if (isLoading === false && card !== null) {
         isLoading = true
+        showDetailLoading()
         try {
-            showDetailLoading()
-            const creature = await searchCreature(card.dataset.id)
+            const creature = await getCreature(card.dataset.id)
             showDetails(creature)
         } catch (error) {
-            showDetailError(error.message)
-            console.error(error)
+            if (error.message.includes("404")) {
+                showDetailError("Créature introuvable")
+            } else {
+                showDetailError(error.message)
+            }
         } finally {
             isLoading = false
         }
-    }
+    } 
 }
 grid.addEventListener("click", handleCardClick)
 detailClose.addEventListener("click", hideDetails)
 
 grid.addEventListener("click", (event) => {
-    if (event.target.id === "retry-btn" && lastAction !== null){
+    if (event.target.id === "retry-btn" && lastAction !== null) {
         lastAction()
     }
-} )
+})
+
+const draft = getDraft()
+if (draft !== null){
+    for (const name in draft) {
+        if (form.elements[name]) {
+            form.elements[name].value = draft[name]
+        }
+    }
+} 
+form.addEventListener("input", () => {
+    saveDraft(Object.fromEntries(new FormData(form)))
+})
+form.addEventListener("reset", clearDraft)
+
+form.addEventListener
