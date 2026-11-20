@@ -48,3 +48,19 @@ export function getStoreTypes(){
     const restore = JSON.parse(localStorage.getItem("type")) || "all"
     return restore
 } 
+
+export function saveDraft(draft) {
+    sessionStorage.setItem("draft", JSON.stringify(draft))
+}
+
+export function getDraft() {
+    const saved = sessionStorage.getItem("draft")
+    if(saved === null){
+        return null
+    }
+    return JSON.parse(saved)
+}
+
+export function clearDraft(){
+    sessionStorage.removeItem("draft")
+}

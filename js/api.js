@@ -3,31 +3,42 @@ const BASE_URL = "http://localhost:3000";
 export async function request(method, route, body = null) {
 const options = {
     method: method,
-    Headers: 
+    headers: 
     {
         "Content-Type": "application/json"
     }
 }
 if (body !== null) {
-    options.body = body
+    options.body = JSON.stringify(body)
 }
+
+let response
 try {
-    const response = await fetch(`${BASE_URL}${route}`, options)
-    if (!response.ok){
-        throw new Error("Connection trublle!")
-    }
-    if (method === "DELETE"){
-        return
-    }
-    return response.json()
+    response = await fetch(`${BASE_URL}${route}`, options)
 }catch (error) {
-    console.log(error)
+    throw new Error("L'API ne répond pas")
 }
+
+if (!response.ok) {
+    throw new Error(`Erreur ${response.status}`)
+}
+if (method === "DELETE") {
+    return
+}
+return response.json()
 }
 
 export async function getCreatures (route){
     const data = await request("GET", route)
-    return Promise.all(data)
+    return data
+}
+
+export async function getCreatures(id) {
+    return await request("GET", `/creatures/${id}`)
+}
+
+export async function createCreature(data) {
+    return await request("POST", "/creatures", data)
 }
 
 

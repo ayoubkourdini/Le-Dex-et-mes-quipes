@@ -72,3 +72,4 @@ export function showDetailError(message){
   panel.classList.remove("hidden");
   panel.classList.add("flex");
 }
+

@@ -64,6 +64,11 @@
         <button type="button" class="chip shrink-0" data-type="Glace">Glace</button>
         <button type="button" class="chip shrink-0" data-type="Ténèbres">Ténèbres</button>
       </div>
+      <select id="sort" class="field font-normal w-48">
+        <option value="id|asc">Numéro</option>
+        <option value="name|asc">Nom A -> Z</option>
+        <option value="name|desc">Nom Z -> A</option>
+      </select>
     </section>
 
     <div class="flex flex-col lg:flex-row gap-8 items-start">
@@ -176,15 +181,15 @@
           <span id="erreur-niveau" class="error-message text-sm font-normal text-muted"></span>
         </label>
         <label class="flex flex-col gap-1 text-sm font-bold">PV
-          <input name="stat1" type="text" placeholder="0 à 999" class="field font-normal">
+          <input name="stat1" type="text" placeholder="0 à 2551" class="field font-normal">
           <span id="erreur-stat1" class="error-message text-sm font-normal text-muted"></span>
         </label>
         <label class="flex flex-col gap-1 text-sm font-bold">Attaque
-          <input name="stat2" type="text" placeholder="0 à 999" class="field font-normal">
+          <input name="stat2" type="text" placeholder="0 à 2551" class="field font-normal">
           <span id="erreur-stat2" class="error-message text-sm font-normal text-muted"></span>
         </label>
         <label class="flex flex-col gap-1 text-sm font-bold">Défense
-          <input name="stat3" type="text" placeholder="0 à 999" class="field font-normal">
+          <input name="stat3" type="text" placeholder="0 à 2551" class="field font-normal">
           <span id="erreur-stat3" class="error-message text-sm font-normal text-muted"></span>
         </label>
         <label class="flex flex-col gap-1 text-sm font-bold">Lien de l'image
@@ -196,6 +201,7 @@
             class="rounded-xl border-2 border-line p-3 font-normal outline-none"></textarea>
           <span id="erreur-description" class="error-message text-sm font-normal text-muted"></span>
         </label>
+        <p id="form-message" class="md:col-span-2 lg:col-span-4 font-bold"></p>
         <div class="flex flex-wrap justify-end gap-3 md:col-span-2 lg:col-span-4">
           <button type="reset" class="btn-outline px-6">Effacer</button>
           <button type="submit" class="btn-primary">Ajouter la créature</button>
